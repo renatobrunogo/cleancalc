@@ -1,0 +1,39 @@
+# Ignorar cache e arquivos Python compilados
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignorar pastas e arquivos de build/instalação
+build/
+dist/
+*.egg-info/
+*.egg
+*.whl
+
+# PyInstaller arquivos temporários
+*.spec
+*.toc
+*.log
+*.manifest
+*.gz
+*.xref
+
+# Ignorar configuração do VSCode
+.vscode/
+
+# Arquivos temporários do Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Caches e relatórios de teste
+.pytest_cache/
+.coverage
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+# Arquivos do Mac (se for o caso)
+*.DS_Store
