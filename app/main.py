@@ -1,6 +1,19 @@
 import tkinter as tk
+import sys
+import os
 from tkinter import ttk
 from calculate import TempAnalyzer
+
+def recurso_caminho(rel_path):
+    """
+    Retorna o caminho absoluto para recursos, mesmo quando empacotado com PyInstaller.
+    """
+    try:
+        base_path = sys._MEIPASS  # Quando empacotado
+    except Exception:
+        base_path = os.path.abspath(".")  # Quando rodando normalmente
+
+    return os.path.join(base_path, rel_path)
 
 def centralizar_janela(janela, largura, altura):
     tela_largura = janela.winfo_screenwidth()
@@ -33,6 +46,7 @@ root = tk.Tk()
 root.title("CleancalC")
 centralizar_janela(root, 600, 400)
 root.configure(bg='#f5f5f5')
+root.iconbitmap(recurso_caminho("assets/icon-log-off.ico"))
 
 # frame principal
 frame = tk.Frame(root, bg="#f5f5f5")
