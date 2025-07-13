@@ -22,24 +22,19 @@ def centralizar_janela(janela, largura, altura):
     y = (tela_altura // 2) - (altura // 2)
     janela.geometry(f'{largura}x{altura}+{x}+{y}')
 
+# Função atualizada para preencher a tabela
 def analisar():
     analisador = TempAnalyzer()
     resultados = analisador.analyze()
 
-    texto_resultado.delete("1.0", tk.END) #limpa o texto anterior
+    # Limpa linhas antigas
+    for item in tree.get_children():
+        tree.delete(item)
 
+    # Insere novas linhas
     for pasta, (arquivos, tamanho) in resultados.items():
         tamanho_formatado = analisador.format_size(tamanho)
-        linha = f"{pasta}: {arquivos} arquivos, {tamanho_formatado}\n"
-        texto_resultado.insert(tk.END, linha)
-
-    # linhas = []
-    # for pasta, (arquivos, tamanho) in resultados.items():
-    #     tamanho_formatado = analisador.format_size(tamanho)
-    #     linhas.append(f"{pasta}: {arquivos} arquivos, {tamanho_formatado}")
-
-    # texto = "\n".join(linhas)
-    # resultado_var.set(texto)
+        tree.insert("", "end", values=(pasta, arquivos, tamanho_formatado))
 
 # Cria a janela principal
 root = tk.Tk()
@@ -57,25 +52,26 @@ titulo = tk.Label(frame, text="CleancalC – Analisador de arquivos temporários
                   font=("Segoe UI", 14, "bold"), bg="#f5f5f5", fg="#3d518d")
 titulo.pack(pady=(0, 10))
 
-# Botão analisar
-btn_analisar = tk.Button(root, text="Analisar", command=analisar)
-btn_analisar.pack(pady=5)
+# Botão analisar com estilo
+style = ttk.Style()
+style.configure("TButton", font=("Segoe UI", 11), padding=6)
+btn_analisar = ttk.Button(root, text="Analisar", command=analisar)
+btn_analisar.pack(pady=10)
 
-# Área de texto com scrollbar
-text_frame = tk.Frame(frame)
-text_frame.pack(fill="both", expand=True)
+# Área de resultado em forma de tabela (Treeview)
+colunas = ("Pasta", "Arquivos", "Tamanho")
+tree = ttk.Treeview(frame, columns=colunas, show="headings", height=8)
+tree.pack(fill="both", expand=True)
 
-texto_resultado = tk.Text(text_frame, height=10, font=("Consolas", 11), wrap="word")
-scrollbar = ttk.Scrollbar(text_frame, command=texto_resultado.yview)
-texto_resultado.configure(yscrollcommand=scrollbar.set)
+# Definindo os nomes das colunas
+tree.heading("Pasta", text="Pasta")
+tree.heading("Arquivos", text="Arquivos")
+tree.heading("Tamanho", text="Tamanho")
 
-texto_resultado.pack(side="left", fill="both", expand=True)
-scrollbar.pack(side="right", fill="y")
-
-# # Label para resultado, usando StringVar para atualizar texto
-# resultado_var = tk.StringVar()
-# resultado = tk.Label(root, textvariable=resultado_var, font=("Lucida Console", 12))
-# resultado.pack(pady=10)
+# Definindo a largura das colunas
+tree.column("Pasta", width=250)
+tree.column("Arquivos", width=80, anchor="center")
+tree.column("Tamanho", width=100, anchor="center")
 
 # Inicia o loop da interface
 root.mainloop()
